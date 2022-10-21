@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { ContactsCollection } from '../api/ContactCollections'
+import { Meteor } from "meteor/meteor"
 
 export const ContactForm = () => { 
     const initialState = {email: '', name: '',imageUrl:''}
@@ -10,15 +11,15 @@ export const ContactForm = () => {
         setUserData({...userData, [name]:value})
       }
     const saveContact = () => {
-      console.log(userData)
-      ContactsCollection.insert({ name, email, imageUrl});
+     Meteor.call( "contact.insert", { name, email, imageUrl})
+     // ContactsCollection.insert({ name, email, imageUrl});
       setUserData(value= '')
       
     }
 
     return (
-    <form>
-    <div>
+    <form style={{marginLeft: 700, marginTop:50}}>
+    <div >
       <label htmlFor='name'>
          Name
       </label>
@@ -37,7 +38,7 @@ export const ContactForm = () => {
       <input type="text" id="imageUrl"  onChange={handleChangeInput} value={imageUrl} name="imageUrl" />
     </div>
     <div>
-      <button onClick={saveContact}>Save</button>
+      <button  class="btn btn-outline-primary" onClick={saveContact}>Save</button>
     </div>
   </form>
 )}
